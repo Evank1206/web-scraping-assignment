@@ -1,37 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const cheerio = require("cheerio");
-const request = require("request");
+const axios = require("axios");
+const colors = require("colors");
 
 
-router.get("/headline", (req, res)=>{
-// axios
-  request.get("https://www.feedster.com/category/advertising/", function(err, httpResponse, body){
+const db = require("../model/scrapingDB");
 
-    // .entry-content
-
-    const $ = cheerio.load(body);
+router.get("/scraping", (req, res, next)=>{
+    // res.send("hello");
+    axios.get("https://www.businessnewsdaily.com/latest").then( ( UrlResponse) =>{
+    // if(err) throw err;
+        const $ = cheerio.load(UrlResponse.data);
     
-    const arr = [];
+        $("li.searchItem").each((i, element)=>{
+            
+            const result = {};
 
-    // $('.entry-title').children().attr('href')
-    $('.entry-title').each(function(i, el){
+            result.headline = $(element).find("a").text();
+            result.img = $(element).find("img.listImg").attr("src")
+            result.summary = $(element).find("p").text();
+            result.articlelink = $(element).find("a.thumbLeft").attr("href");
+            
+            db.WebScraping.create(result).then( (err , dbWebScraping)=>{
+                if(err) throw err;
+                console.log(dbWebScraping);
+                
 
-      arr.push({
-        headline: $(this).text(),
-        uri: $(this).children().attr('href')
-      })
+            })
+
+
+            // console.log("HEADLINE: " + headline.blue);
+            // console.log("IMAGE: " + img.white);
+            // console.log("SUMMARY: " + summary.cyan);
+            // console.log("ARTICLE = URL: " + articlelink.green);
+            // console.log(".........................................................\n");
+        })
     })
+    // console.log(req);
 
-
-    res.send(arr)
-  })
+    
+    res.send();
+    // next();
 });
-
-
-
-
-
 
 
 module.exports = router;

@@ -1,25 +1,25 @@
 const express = require("express");
 const app = express();
-require('dotenv').config();
-const PORT = process.env.PORT || 4000;
+const PORT = 3000;
 
-const db = require("./model");
 const mongoose = require("mongoose");
-// const connection = mongoose.collection;
-
-mongoose.connect("mongodb://localhost:27017/WebScraping", {
+// const db = require("./model/scrapingDB");
+mongoose.connect('mongodb://localhost/web_Scraping', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-}, ()=>{
+    // useUnifiedTopology: true
+});
 
-    app.use(express.urlencoded({extended:true}));
-    app.use(express.json());
-    
-    const apiRoutes  = require("./routes/apiRoutes");
-    app.use("/api", apiRoutes);
-    
-    app.listen(PORT, ()=>{
-        console.log(`SERVER CONNECTED TO http://localhost:4000`);
-    });    
+app.use(express.urlencoded({urlencoded:true}));
+app.use(express.json());
+
+const apiRouter = require("./routes/apiRoutes");
+app.use("/api", apiRouter);
+
+
+
+
+
+app.listen(PORT, ()=>{
+    console.log(`server connected: http://localhost:3000`);
 });
 
