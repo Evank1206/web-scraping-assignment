@@ -4,13 +4,12 @@ const mongoose = require("mongoose");
     // const ObjectId = Schema.ObjectId;
     
     const ScrapPost = new Schema({
-        headline:String,
+        headline: String,
         img: String,
         summary: String,
         articlelink: String
     })
  
-
     const WebScraping = mongoose.model("WebScraping", ScrapPost);
 
-    module.exports = WebScraping;
+    module.exports.WebScraping = WebScraping;

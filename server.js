@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // const db = require("./model/scrapingDB");
 mongoose.connect('mongodb://localhost/web_Scraping', {
     useNewUrlParser: true,
-    // useUnifiedTopology: true
+    useUnifiedTopology: true
 });
 
 app.use(express.urlencoded({urlencoded:true}));

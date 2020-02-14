@@ -4,12 +4,11 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const colors = require("colors");
 
-
 const db = require("../model/scrapingDB");
 
 router.get("/scraping", (req, res, next)=>{
     // res.send("hello");
-    axios.get("https://www.businessnewsdaily.com/latest").then( ( UrlResponse) =>{
+    axios.get("https://www.businessnewsdaily.com/latest").then( (UrlResponse) =>{
     // if(err) throw err;
         const $ = cheerio.load(UrlResponse.data);
     
@@ -22,13 +21,16 @@ router.get("/scraping", (req, res, next)=>{
             result.summary = $(element).find("p").text();
             result.articlelink = $(element).find("a.thumbLeft").attr("href");
             
-            db.WebScraping.create(result).then( (err , dbWebScraping)=>{
-                if(err) throw err;
-                console.log(dbWebScraping);
+            db.WebScraping.create(result).then( (dbWebScraping)=>{
+                // if(err) throw err;
+                res.send(dbWebScraping);
+                // console.log(dbWebScraping);
                 
-
-            })
-
+                
+            }).catch( (err)=>{
+        // catch is doesn't have any role;
+                console.log(err);
+            });
 
             // console.log("HEADLINE: " + headline.blue);
             // console.log("IMAGE: " + img.white);
@@ -36,13 +38,27 @@ router.get("/scraping", (req, res, next)=>{
             // console.log("ARTICLE = URL: " + articlelink.green);
             // console.log(".........................................................\n");
         })
+    // res.send("db conected");
     })
-    // console.log(req);
+    // console.log(res.params.dbWebScraping);
+    // res.send(req.body.dbWebScraping);
 
-    
-    res.send();
     // next();
 });
+
+// router.post("/post", (req, res, next) =>{
+//     // res.send("this i post");
+//     const hsj = db.scraping.insert({
+//        date: Date()
+//     });
+//       res.send(hsj);
+// })
+
+
+
+
+
+
 
 
 module.exports = router;
