@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const cheerio = require("cheerio");
 const axios = require("axios");
-const colors = require("colors");
+// const colors = require("colors");
 
 const db = require("../model/scrapingDB");
 
@@ -22,13 +22,11 @@ router.get("/scraping", (req, res, next)=>{
             result.articlelink = $(element).find("a.thumbLeft").attr("href");
             
             db.WebScraping.create(result).then( (dbWebScraping)=>{
-                // if(err) throw err;
-                res.send(dbWebScraping);
-                // console.log(dbWebScraping);
                 
+                res.send(dbWebScraping);
+                console.log(dbWebScraping);
                 
             }).catch( (err)=>{
-        // catch is doesn't have any role;
                 console.log(err);
             });
 
@@ -40,19 +38,20 @@ router.get("/scraping", (req, res, next)=>{
         })
     // res.send("db conected");
     })
-    // console.log(res.params.dbWebScraping);
-    // res.send(req.body.dbWebScraping);
-
+   
+    // res.send(dbWebScraping);
+    // console.log(dbWebScraping);
     // next();
-});
+// });
 
-// router.post("/post", (req, res, next) =>{
+// router.get("/see", (req, res, next) =>{
 //     // res.send("this i post");
-//     const hsj = db.scraping.insert({
-//        date: Date()
-//     });
-//       res.send(hsj);
-// })
+//     db.WebScraping.find({}).then( (dbWebScraping)=>{
+
+//         res.json(dbWebScraping);
+//     })
+      
+})
 
 
 
